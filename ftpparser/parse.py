@@ -2,6 +2,17 @@ import re
 import datetime
 from .parse_time import parse_time
 
+class host:
+  def __init__(self, name, size, tst, isdir, dlble, islink, perms):
+    self.name = name 
+    self.size = size 
+    self.tst = tst
+    self.isdir = isdir
+    self.dlble = dlble 
+    self.islink = islink 
+    self.perms = perms 
+
+
 class FTPParser(object):
 
     def __init__(self):
@@ -42,7 +53,8 @@ class FTPParser(object):
             mtime = parse_time(date, now)
 
             #name, size, _sizetype, mtime, _mtimetype, cwd, retr, _id, _idtype, islink
-            return m_name, size, int(mtime.timestamp()), trycwd, tryretr, islink, permissions
+            #return m_name, size, int(mtime.timestamp()), trycwd, tryretr, islink, permissions
+            return host(m_name, size, int(mtime.timestamp()), trycwd, tryretr, islink, permissions)
 
         match = self.netware_re.fullmatch(line)
         if match:
@@ -62,7 +74,8 @@ class FTPParser(object):
         
             mtime = parse_time(date, now)
             islink = 0
-            return name, size, int(mtime.timestamp()), trycwd, tryretr, islink, None
+            #return name, size, int(mtime.timestamp()), trycwd, tryretr, islink, None
+            return host(name, size, int(mtime.timestamp()), trycwd, tryretr, islink, None)
 
         match = self.netpresenz_re.fullmatch(line)
         if match:
@@ -89,7 +102,8 @@ class FTPParser(object):
                 except ValueError:
                     pass
             mtime = parse_time(date, now)
-            return name, size, int(mtime.timestamp()), trycwd, tryretr, islink, permissions
+            #return name, size, int(mtime.timestamp()), trycwd, tryretr, islink, permissions
+            return host(name, size, int(mtime.timestamp()), trycwd, tryretr, islink, permissions)
 
         match = self.eplf_re.fullmatch(line)
         if match:
@@ -120,7 +134,8 @@ class FTPParser(object):
             if typ == 'r':
                 tryretr = 1
 
-            return name, size, mtime, trycwd, tryretr, islink, None
+            #return name, size, mtime, trycwd, tryretr, islink, None
+            return host(name, size, mtime, trycwd, tryretr, islink, None)
         
         match = self.multinet_re.fullmatch(line)
         if match:
@@ -146,7 +161,8 @@ class FTPParser(object):
             # Multinet doesn't provide a size
             size = 0
 
-            return name, size, mtime, trycwd, tryretr, islink, None
+            #return name, size, mtime, trycwd, tryretr, islink, None
+            return host(name, size, mtime, trycwd, tryretr, islink, None)
     
         match = self.msdos_re.fullmatch(line)
         if match:
@@ -167,7 +183,8 @@ class FTPParser(object):
         
             mtime = int(parse_time(date, now).timestamp())
 
-            return name, size, mtime, trycwd, tryretr, 0, None
+            #return name, size, mtime, trycwd, tryretr, 0, None
+            return host(name, size, mtime, trycwd, tryretr, 0, None)
         
         return None
 
