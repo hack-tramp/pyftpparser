@@ -33,7 +33,7 @@ def parse_time(line, now=None):
         month = MONTHS.get(month.lower())
         day = int(day)
 
-        yr_match = re.fullmatch("(\\d{2}):(\\d{2})", year)
+        yr_match = re.fullmatch("(\\d{1,2}):(\\d{2})", year)
         if yr_match:
             hour = int(yr_match[1])
             minute = int(yr_match[2])
@@ -55,7 +55,7 @@ def parse_time(line, now=None):
     multinet_re = re.compile("^(\\d{1,2})" # day of month
         "-([A-Za-z]{3})" # month
         "-(\\d{4})" # year
-        "\\s+(\\d{2})" # hour
+        "\\s+(\\d{1,2})" # hour
         ":(\\d{2})" # minute
         "(:(\\d{2}))?$" # second
     )
@@ -81,7 +81,7 @@ def parse_time(line, now=None):
     msdos_re = re.compile("^(\\d{2})" # month
         "-(\\d{2})" # day of month
         "-(\\d{2})" # year
-        "\\s+(\\d{2})" # hour
+        "\\s+(\\d{1,2})" # hour
         ":(\\d{2})" # minute
         "([AP]M)$" # AM or PM
     )
